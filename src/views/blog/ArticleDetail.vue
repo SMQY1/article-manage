@@ -31,81 +31,31 @@
   const loading = ref(false)
   const article = ref<any>(null)
 
-  // 从路由获取文章 ID
-  const articleId = route.params.id
-
-  // 模拟获取文章详情（后续改成真实 API）
   const fetchArticleDetail = async () => {
     loading.value = true
     try {
-      // 模拟异步请求
-      await new Promise((resolve) => setTimeout(resolve, 300))
-
-      // 模拟数据
-      const mockArticles: Record<string, any> = {
-        '1': {
-          id: 1,
-          title: '我的第一篇博客',
-          date: '2025-03-20',
-          category: 'Vue',
-          content: `
-          <h2>为什么要写博客？</h2>
-          <p>写博客是很好的学习方式，可以帮助自己梳理知识体系。</p>
-          <h2>这个博客项目</h2>
-          <p>这是一个基于 <strong>Vue 3 + TypeScript + Element Plus</strong> 的博客系统前端。</p>
-          <p>目前使用 Mock 数据，后续将接入 GitHub Issues API 实现动态内容管理。</p>
-          <h2>技术栈</h2>
-          <ul>
-            <li>Vue 3 + Composition API</li>
-            <li>TypeScript</li>
-            <li>Vue Router</li>
-            <li>Pinia 状态管理</li>
-            <li>SCSS 样式</li>
-          </ul>
-          <p>接下来会逐步完善功能，欢迎关注~</p>
-        `
-        },
-        '2': {
-          id: 2,
-          title: 'Vue 3 组合式 API 学习笔记',
-          date: '2025-03-19',
-          category: 'Vue',
-          content: `
-          <h2>组合式 API 简介</h2>
-          <p>组合式 API (Composition API) 是 Vue 3 中新增的一套 API 风格。</p>
-          <h2>核心概念</h2>
-          <ul>
-            <li><code>ref</code> 和 <code>reactive</code>：响应式数据</li>
-            <li><code>computed</code>：计算属性</li>
-            <li><code>watch</code>：侦听器</li>
-            <li><code>生命周期钩子</code>：onMounted, onUpdated 等</li>
-          </ul>
-          <h2>优势</h2>
-          <p>更好的逻辑复用、更灵活的代码组织、更好的类型推导支持。</p>
-        `
-        },
-        '3': {
-          id: 3,
-          title: '前端工程化入门',
-          date: '2025-03-18',
-          category: '工程化',
-          content: `
-          <h2>什么是前端工程化？</h2>
-          <p>前端工程化是指将软件工程的理念和方法应用到前端开发中。</p>
-          <h2>主要内容</h2>
-          <ul>
-            <li>模块化：将代码拆分为独立的模块</li>
-            <li>组件化：UI 的拆分与复用</li>
-            <li>自动化：构建、测试、部署流程自动化</li>
-            <li>规范化：代码规范、目录结构规范</li>
-          </ul>
-          <h2>常用工具</h2>
-          <p>Webpack、Vite、ESLint、Prettier、Husky 等。</p>
-        `
+      const id = route.params.id as string
+      const stored = localStorage.getItem('blog_articles')
+      if (stored) {
+        const articles = JSON.parse(stored)
+        const found = articles.find((a: any) => a.id === id)
+        if (found) {
+          article.value = {
+            id: found.id,
+            title: found.title,
+            content: found.content || '暂无内容',
+            date: found.createTime || new Date().toLocaleDateString(),
+            category: found.category || '技术'
+          }
+        } else {
+          article.value = null
         }
+      } else {
+        article.value = null
       }
-
-      article.value = mockArticles[articleId as string] || null
+    } catch (error) {
+      console.error('加载文章失败:', error)
+      article.value = null
     } finally {
       loading.value = false
     }
