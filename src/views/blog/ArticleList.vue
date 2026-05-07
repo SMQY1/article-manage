@@ -4,6 +4,9 @@
     <div class="page-header">
       <h1>📝 我的博客</h1>
       <p>记录学习与成长</p>
+      <div class="admin-link">
+        <router-link to="/article-manage/list" class="admin-btn"> 🔧 内容管理 </router-link>
+      </div>
     </div>
 
     <!-- 文章列表 -->
@@ -86,3 +89,133 @@
     window.removeEventListener('scroll', handleScroll)
   })
 </script>
+
+<style scoped>
+  .article-list-container {
+    max-width: 900px;
+    padding: 30px 20px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+    border-bottom: 2px solid #eaeef5;
+  }
+
+  .page-header h1 {
+    margin-bottom: 10px;
+    font-size: 32px;
+    color: #2c3e50;
+  }
+
+  .page-header p {
+    font-size: 16px;
+    color: #7f8c8d;
+  }
+
+  /* 后台管理按钮样式 */
+  .admin-link {
+    margin-top: 15px;
+  }
+
+  .admin-btn {
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    background-color: #409eff;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+  }
+
+  .admin-btn:hover {
+    background-color: #66b1ff;
+  }
+
+  .article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .article-card {
+    padding: 24px;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #eaeef5;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+    transition: all 0.3s ease;
+  }
+
+  .article-card:hover {
+    box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+    transform: translateY(-2px);
+  }
+
+  .article-title {
+    margin-bottom: 12px;
+    font-size: 22px;
+    color: #2c3e50;
+    transition: color 0.2s;
+  }
+
+  .article-card:hover .article-title {
+    color: #409eff;
+  }
+
+  .article-meta {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #909399;
+  }
+
+  .article-summary {
+    margin-bottom: 16px;
+    line-height: 1.6;
+    color: #606266;
+  }
+
+  .read-more {
+    font-size: 14px;
+    font-weight: 500;
+    color: #409eff;
+  }
+
+  .loading,
+  .empty {
+    padding: 60px;
+    color: #909399;
+    text-align: center;
+  }
+
+  /* 回到顶部按钮样式 */
+  .back-top {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    background-color: #409eff;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgb(0 0 0 / 20%);
+    transition: all 0.3s;
+  }
+
+  .back-top:hover {
+    background-color: #66b1ff;
+    transform: translateY(-2px);
+  }
+</style>
