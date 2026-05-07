@@ -35,10 +35,18 @@
     loading.value = true
     try {
       const id = route.params.id as string
+      console.log('当前文章ID:', id)
+
       const stored = localStorage.getItem('blog_articles')
+      console.log('localStorage 数据:', stored)
+
       if (stored) {
         const articles = JSON.parse(stored)
+        console.log('解析后的文章数组:', articles)
+
         const found = articles.find((a: any) => a.id === id)
+        console.log('找到的文章:', found)
+
         if (found) {
           article.value = {
             id: found.id,
@@ -47,14 +55,17 @@
             date: found.createTime || new Date().toLocaleDateString(),
             category: found.category || '技术'
           }
+          console.log('赋值后的 article:', article.value)
         } else {
           article.value = null
+          console.warn('未找到文章, ID:', id)
         }
       } else {
         article.value = null
+        console.warn('localStorage 中没有数据')
       }
     } catch (error) {
-      console.error('加载文章失败:', error)
+      console.error('加载失败:', error)
       article.value = null
     } finally {
       loading.value = false
