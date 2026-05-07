@@ -23,7 +23,7 @@ const blogRoutes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'detail/:id',
+        path: ':id',
         name: 'ArticleDetail',
         component: () => import('@/views/blog/ArticleDetail.vue'),
         meta: {
