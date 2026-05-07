@@ -44,7 +44,7 @@
         const articles = JSON.parse(stored)
         console.log('解析后的文章数组:', articles)
 
-        const found = articles.find((a: any) => a.id === id)
+        const found = articles.find((a: any) => String(a.id) === String(id))
         console.log('找到的文章:', found)
 
         if (found) {
