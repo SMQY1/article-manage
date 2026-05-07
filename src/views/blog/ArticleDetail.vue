@@ -1,5 +1,12 @@
 <template>
   <div class="article-detail-container">
+    <div style="padding: 10px; margin-bottom: 10px; color: white; background-color: red">
+      🚀 DEBUG: ArticleDetail 组件已加载！当前文章ID: {{ route.params.id }}
+    </div>
+
+    <div class="detail-header">
+      <button class="back-btn" @click="goBack">← 返回列表</button>
+    </div>
     <div class="detail-header">
       <button class="back-btn" @click="goBack">← 返回列表</button>
     </div>
