@@ -3,6 +3,8 @@
     <div class="detail-header">
       <button class="back-btn" @click="goBack">← 返回列表</button>
     </div>
+    <!-- 新增编辑按钮 -->
+    <button class="edit-btn" @click="goToEdit">✏️ 编辑这篇文章</button>
 
     <!-- 加载状态 -->
     <div v-if="loading" class="loading">加载中...</div>
@@ -79,6 +81,11 @@
   onMounted(() => {
     fetchArticleDetail()
   })
+
+  const goToEdit = () => {
+    const articleId = route.params.id
+    router.push(`/article-manage/edit/${articleId}`)
+  }
 </script>
 
 <style scoped>
@@ -174,5 +181,19 @@
     padding: 60px;
     color: #909399;
     text-align: center;
+  }
+
+  .edit-btn {
+    padding: 8px 16px;
+    margin-left: 16px;
+    color: white;
+    cursor: pointer;
+    background-color: #67c23a;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .edit-btn:hover {
+    background-color: #85ce61;
   }
 </style>
