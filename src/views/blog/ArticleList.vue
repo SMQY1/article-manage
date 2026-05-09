@@ -66,7 +66,7 @@
   }
 
   const goToDetail = (id: string) => {
-    router.push(`/blog/${id}`)
+    router.push(`/blog/detail/${id}`)
   }
 
   // 监听滚动事件
