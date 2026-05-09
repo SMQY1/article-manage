@@ -59,13 +59,13 @@
           title: '欢迎使用我的博客系统',
           summary: '你可以在后台管理页面发布、编辑和删除文章。',
           date: new Date().toLocaleDateString(),
-          cetegory: '公告'
+          category: '公告'
         }
       ]
     }
   }
 
-  const goToDetail = (id: number) => {
+  const goToDetail = (id: string) => {
     router.push(`/blog/${id}`)
   }
 
