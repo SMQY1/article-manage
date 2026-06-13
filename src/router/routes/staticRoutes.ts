@@ -13,9 +13,9 @@ export const staticRoutes: RouteRecordRaw[] = [
     meta: { title: '文章列表' }
   },
   {
-    path: '/blog/detail/:id',
+    path: '/blog/:id',
     name: 'ArticleDetail',
     component: () => import('@/views/blog/ArticleDetail.vue'),
-    meta: { title: '文章详情' }
+    meta: { title: '文章详情', hidden: true }
   }
 ]

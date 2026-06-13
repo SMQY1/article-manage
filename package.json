@@ -15,7 +15,6 @@
     "lint:prettier": "prettier --write \"**/*.{js,cjs,ts,json,tsx,css,less,scss,vue,html,md}\"",
     "lint:stylelint": "stylelint  \"**/*.{css,scss,vue}\" --fix",
     "lint:lint-staged": "lint-staged",
-    "prepare": "husky",
     "commit": "git-cz",
     "clean:dev": "tsx scripts/clean-dev.ts"
   },
@@ -65,6 +64,7 @@
     "element-plus": "^2.11.2",
     "file-saver": "^2.0.5",
     "highlight.js": "^11.10.0",
+    "marked": "^18.0.3",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
     "ohash": "^2.0.11",

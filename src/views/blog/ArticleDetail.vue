@@ -2,24 +2,20 @@
   <div class="article-detail-container">
     <div class="detail-header">
       <button class="back-btn" @click="goBack">← 返回列表</button>
+      <button class="edit-btn" @click="goToEdit">✏️ 编辑这篇文章</button>
     </div>
-    <!-- 新增编辑按钮 -->
-    <button class="edit-btn" @click="goToEdit">✏️ 编辑这篇文章</button>
 
-    <!-- 加载状态 -->
     <div v-if="loading" class="loading">加载中...</div>
 
-    <!-- 文章内容 -->
     <div v-else-if="article" class="article-content">
       <h1 class="article-title">{{ article.title }}</h1>
       <div class="article-meta">
-        <span>📅 {{ article.date }}</span>
+        <span>📅 {{ formatDate(article.createTime || article.date) }}</span>
         <span>🏷️ {{ article.category || '未分类' }}</span>
       </div>
       <div class="article-body" v-html="article.content"></div>
     </div>
 
-    <!-- 文章不存在 -->
     <div v-else class="empty">文章不存在</div>
   </div>
 </template>
@@ -27,6 +23,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { getArticle } from '@/api/article'
 
   const route = useRoute()
   const router = useRouter()
@@ -37,37 +34,10 @@
     loading.value = true
     try {
       const id = route.params.id as string
-      console.log('当前文章ID:', id)
-
-      const stored = localStorage.getItem('blog_articles')
-      console.log('localStorage 数据:', stored)
-
-      if (stored) {
-        const articles = JSON.parse(stored)
-        console.log('解析后的文章数组:', articles)
-
-        const found = articles.find((a: any) => String(a.id) === String(id))
-        console.log('找到的文章:', found)
-
-        if (found) {
-          article.value = {
-            id: found.id,
-            title: found.title,
-            content: found.content || '暂无内容',
-            date: found.createTime || new Date().toLocaleDateString(),
-            category: found.category || '技术'
-          }
-          console.log('赋值后的 article:', article.value)
-        } else {
-          article.value = null
-          console.warn('未找到文章, ID:', id)
-        }
-      } else {
-        article.value = null
-        console.warn('localStorage 中没有数据')
-      }
+      const res = await getArticle(id)
+      article.value = res.data
     } catch (error) {
-      console.error('加载失败:', error)
+      console.error('加载文章失败:', error)
       article.value = null
     } finally {
       loading.value = false
@@ -78,13 +48,22 @@
     router.push('/blog/list')
   }
 
+  const goToEdit = () => {
+    const articleId = route.params.id
+    router.push(`/article-manage/edit/${articleId}`)
+  }
+
   onMounted(() => {
     fetchArticleDetail()
   })
 
-  const goToEdit = () => {
-    const articleId = route.params.id
-    router.push(`/article-manage/edit/${articleId}`)
+  const formatDate = (dateStr: string | null | undefined) => {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    return `${year}-${month}-${day}`
   }
 </script>
 
@@ -96,6 +75,8 @@
   }
 
   .detail-header {
+    display: flex;
+    gap: 16px;
     margin-bottom: 30px;
   }
 
@@ -111,6 +92,20 @@
 
   .back-btn:hover {
     color: #66b1ff;
+  }
+
+  .edit-btn {
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    background-color: #67c23a;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  .edit-btn:hover {
+    background-color: #85ce61;
   }
 
   .article-content {
@@ -183,17 +178,13 @@
     text-align: center;
   }
 
-  .edit-btn {
-    padding: 8px 16px;
-    margin-left: 16px;
-    color: white;
-    cursor: pointer;
-    background-color: #67c23a;
-    border: none;
-    border-radius: 4px;
-  }
-
-  .edit-btn:hover {
-    background-color: #85ce61;
+  /* 文章详情页的图片样式 */
+  .article-body img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 16px auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   }
 </style>
