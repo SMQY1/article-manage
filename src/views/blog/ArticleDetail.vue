@@ -21,50 +21,59 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { getArticle } from '@/api/article'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getArticle } from '@/api/article'
+import { marked } from 'marked'
 
-  const route = useRoute()
-  const router = useRouter()
-  const loading = ref(false)
-  const article = ref<any>(null)
+const route = useRoute()
+const router = useRouter()
+const loading = ref(false)
+const article = ref<any>(null)
 
-  const fetchArticleDetail = async () => {
-    loading.value = true
-    try {
-      const id = route.params.id as string
-      const res = await getArticle(id)
-      article.value = res.data
-    } catch (error) {
-      console.error('加载文章失败:', error)
-      article.value = null
-    } finally {
-      loading.value = false
+const fetchArticleDetail = async () => {
+  loading.value = true
+  try {
+    const id = route.params.id as string
+    const res = await getArticle(id)
+    const rawArticle = res.data
+    
+    // 将 Markdown 内容转换为 HTML
+    if (rawArticle && rawArticle.content) {
+      const htmlContent = await marked.parse(rawArticle.content)
+      rawArticle.content = htmlContent
     }
+    
+    article.value = rawArticle
+  } catch (error) {
+    console.error('加载文章失败:', error)
+    article.value = null
+  } finally {
+    loading.value = false
   }
+}
 
-  const goBack = () => {
-    router.push('/blog/list')
-  }
+const goBack = () => {
+  router.push('/blog/list')
+}
 
-  const goToEdit = () => {
-    const articleId = route.params.id
-    router.push(`/article-manage/edit/${articleId}`)
-  }
+const goToEdit = () => {
+  const articleId = route.params.id
+  router.push(`/article-manage/edit/${articleId}`)
+}
 
-  onMounted(() => {
-    fetchArticleDetail()
-  })
+const formatDate = (dateStr: string | null | undefined) => {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${year}-${month}-${day}`
+}
 
-  const formatDate = (dateStr: string | null | undefined) => {
-    if (!dateStr) return ''
-    const date = new Date(dateStr)
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    return `${year}-${month}-${day}`
-  }
+onMounted(() => {
+  fetchArticleDetail()
+})
 </script>
 
 <style scoped>
