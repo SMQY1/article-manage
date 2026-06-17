@@ -58,6 +58,13 @@
 
     <!-- 回到顶部 -->
     <div v-show="showBackTop" class="back-top" @click="scrollToTop">↑</div>
+
+    <!-- ===== 新增：ICP备案号 ===== -->
+    <footer class="icp-footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+        湘ICP备2026023614号
+      </a>
+    </footer>
   </div>
 </template>
 
@@ -326,5 +333,25 @@ onUnmounted(() => {
 .back-top:hover {
   background-color: #66b1ff;
   transform: translateY(-2px);
+}
+
+/* ===== 新增：备案号页脚样式 ===== */
+.icp-footer {
+  text-align: center;
+  padding: 20px 0 10px;
+  margin-top: 40px;
+  border-top: 1px solid #eaeef5;
+  font-size: 12px;
+  color: #909399;
+}
+
+.icp-footer a {
+  color: #909399;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.icp-footer a:hover {
+  color: #409eff;
 }
 </style>
